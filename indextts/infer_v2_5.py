@@ -20,6 +20,7 @@ from omegaconf import OmegaConf
 from indextts.codec.models import EnhancedCodec
 from indextts.gpt.model_v2 import UnifiedVoice
 from indextts.utils.checkpoint import load_checkpoint
+from indextts.utils.runtime import rocm_inference_options
 from indextts.utils.common import fade_out_tail, save_pcm_wav
 from indextts.utils.front import TextNormalizer
 from indextts.utils.tokenizer import get_tokenizer, lang_to_token
@@ -92,6 +93,10 @@ class IndexTTS2:
                 Required for ``infer(..., use_emo_text=True)``. Attempting to use emotion-text
                 guidance when this is disabled will raise a RuntimeError.
         """
+        use_cuda_kernel, use_deepspeed, use_accel = rocm_inference_options(
+            use_cuda_kernel, use_deepspeed, use_accel
+        )
+
         if device is not None:
             self.device = device
             self.use_bf16 = False if device == "cpu" else use_bf16

@@ -27,7 +27,7 @@ desktop.ini
 # IndexTTS.
 /cache/
 /checkpoints*/*
-!/checkpoints*/*.yaml
+/checkpoints*/*.yaml
 /outputs/
 
 # Example audio files (downloaded on demand, not stored in git)

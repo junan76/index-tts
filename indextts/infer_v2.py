@@ -19,6 +19,7 @@ from omegaconf import OmegaConf
 from indextts.gpt.model_v2 import UnifiedVoice
 from indextts.codec.maskgct_codec import build_semantic_codec
 from indextts.utils.checkpoint import load_checkpoint
+from indextts.utils.runtime import rocm_inference_options
 from indextts.utils.common import fade_out_tail, save_pcm_wav
 from indextts.utils.front import TextNormalizer, TextTokenizer
 
@@ -55,6 +56,10 @@ class IndexTTS2:
             aux_paths (dict | None): pre-downloaded auxiliary model paths from ensure_models_available().
                 If None, downloads are performed automatically.
         """
+        use_cuda_kernel, use_deepspeed, use_accel = rocm_inference_options(
+            use_cuda_kernel, use_deepspeed, use_accel
+        )
+
         # Ensure auxiliary models are available
         if aux_paths is None:
             from indextts.utils.model_download import ensure_models_available
